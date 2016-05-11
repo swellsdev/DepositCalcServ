@@ -10,34 +10,34 @@ function OneBarChart(data,selector)
 {   
     function translateFunc(d, i)
     { 
-        var marginLeft = getWidthBeforeElement(data,i);
-        return "translate("+xScale(marginLeft)+"," + barHeight + ")"; 
+        var marginBottom = getMarginBeforeElement(data,i);
+        return "translate("+ 0 +"," + xScale(marginBottom) + ")"; 
     }
     
-    function getWidthBeforeElement(data,element)
+    function getMarginBeforeElement(data,element)
     {
-        var width = 0;
+        var margin = 0;
         if(element != 0)
         {
             for(i=0; i < element; i++)
             {
-                width += data[i];
+                margin += data[i];
             }        
         }
-        return width;
+        return margin;
     }
     
-    var width = 420;
-    var barHeight = 60; 
+    var width = 60;
+    var height = 420; 
     var data = data.sort(function(a, b){return a-b});
     
     var xScale = d3.scale.linear()
         .domain([0, d3.sum(data)])
-        .range([0, width]);       
+        .range([0, height]);       
     
     var chart = d3.select(selector)
         .attr("width", width)
-        .attr("height", barHeight * data.length);
+        .attr("height", height);
     
     var bar = chart.selectAll("g")
         .data(data)
@@ -45,12 +45,12 @@ function OneBarChart(data,selector)
         .attr("transform", translateFunc);
         
     bar.append("rect")
-        .attr("width", xScale)
-        .attr("height", barHeight - 1);
+        .attr("width", width)
+        .attr("height", xScale);
 
     bar.append("text")
-        .attr("x", $.proxy(function(d) { return xScale(d) - 3; },this))
-        .attr("y", barHeight / 2)
+        .attr("x", width / 2)
+        .attr("y", $.proxy(function(d) { return xScale(d) / 2; },this))
         .attr("dy", ".35em")
         .text(function(d) { return d; });
 }
